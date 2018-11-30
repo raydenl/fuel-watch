@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "fuel-watch",
+    "description": "A very interesting project.",
+    "slug": "fuel-watch",
+    "privacy": "public",
+    "sdkVersion": "30.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "rayden-lee",
+            "project": "fuelwatch",
+            "authToken": "ba98c8c835534cdabd0ab9c252d54388b93da0c53eb6415f9622900b5da6d3a9"
+          }
+        }
+      ]
+    }
+  }
+}

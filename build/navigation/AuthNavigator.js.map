@@ -1,0 +1,1 @@
+{"version":3,"file":"AuthNavigator.js","sourceRoot":"","sources":["../../src/navigation/AuthNavigator.tsx"],"names":[],"mappings":"AAAA,OAAO,EAAE,oBAAoB,EAAE,MAAM,kBAAkB,CAAC;AACxD,OAAO,WAAW,MAAM,wBAAwB,CAAC;AACjD,OAAO,EAAE,UAAU,EAAE,MAAM,aAAa,CAAC;AAEzC,MAAM,SAAS,GAAG,oBAAoB,CAAC,EAAE,CAAC,UAAU,CAAC,EAAE,WAAW,EAAE,CAAC,CAAC;AAEtE,eAAe,SAAS,CAAA"}

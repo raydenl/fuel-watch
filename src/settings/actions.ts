@@ -34,7 +34,7 @@ export const saveSettings = (uid: string, settings: Settings) =>
                 const userRef = database.ref('settings')
 
                 await userRef.child(uid).update(new SettingsEntity(settings))
-                dispatch(actionCreators.settingsSaved())
+                dispatch(actionCreators.settingsSaved(settings))
                 resolve()
             }
             catch (err) {

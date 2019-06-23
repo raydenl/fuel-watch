@@ -7,16 +7,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import React from "react";
-import { FlatList, Text, StyleSheet, Dimensions, View, Button } from "react-native";
+import { FlatList, Text, StyleSheet, View, Button } from "react-native";
 import { stationsActions, petrolTypes } from "../stations";
 import { connect } from "react-redux";
 import Sentry from '../libraries/sentry';
-const { width } = Dimensions.get('window');
+import { settingsDefaults } from "../settings";
+import Layout from "../constants/Layout";
 class ExpandedStationListItem extends React.PureComponent {
     constructor() {
         super(...arguments);
-        this._saveStationData = (station) => () => __awaiter(this, void 0, void 0, function* () {
-            yield this.props.saveStation(this.props.user.uid, station);
+        this._saveStationData = (item) => () => __awaiter(this, void 0, void 0, function* () {
+            yield this.props.saveStation(this.props.user.uid, item.petrolType, item.station);
         });
         this._mapToItems = () => {
             return petrolTypes.map(type => ({
@@ -28,11 +29,15 @@ class ExpandedStationListItem extends React.PureComponent {
             React.createElement(Text, null, item.petrolType),
             React.createElement(Text, null, item.station.name),
             React.createElement(Text, null, item.station.vicinity),
-            React.createElement(Text, null, item.station.price[item.petrolType]),
-            React.createElement(Button, { title: "Save", onPress: this._saveStationData(item.station) })));
+            item.station.price &&
+                React.createElement(Text, null, item.station.price[item.petrolType]),
+            React.createElement(Button, { title: "Save", onPress: this._saveStationData(item) })));
+        this._getItemLayout = (_data, index) => ({
+            length: Layout.window.width, offset: (Layout.window.width - 90) * index, index: index
+        });
     }
     render() {
-        return (React.createElement(FlatList, { data: this._mapToItems(), renderItem: this._renderItem, keyExtractor: item => item.petrolType, horizontal: true, showsHorizontalScrollIndicator: false, style: styles.container, decelerationRate: 0, snapToInterval: width - 60, snapToAlignment: "center", contentOffset: { x: -30, y: 0 }, contentInset: {
+        return (React.createElement(FlatList, { data: this._mapToItems(), renderItem: this._renderItem, keyExtractor: item => item.petrolType, horizontal: true, showsHorizontalScrollIndicator: false, style: styles.container, decelerationRate: 0, snapToInterval: Layout.window.width - 60, snapToAlignment: "center", initialScrollIndex: petrolTypes.indexOf(this.props.petrolType), contentOffset: { x: -30, y: 0 }, getItemLayout: this._getItemLayout, contentInset: {
                 top: 0,
                 left: 30,
                 bottom: 0,
@@ -48,7 +53,7 @@ const styles = StyleSheet.create({
     card: {
         //marginTop: 100,
         backgroundColor: 'blue',
-        width: width - 80,
+        width: Layout.window.width - 80,
         //margin: 10,
         height: 200,
         borderRadius: 10,
@@ -56,11 +61,11 @@ const styles = StyleSheet.create({
         padding: 10,
     }
 });
-const saveStation = (uid, station) => (dispatch) => __awaiter(this, void 0, void 0, function* () {
+const saveStation = (uid, petrolType, station) => (dispatch) => __awaiter(this, void 0, void 0, function* () {
     try {
-        const key = "91";
-        station.confirmedBy[key] = uid;
-        station.confirmedAt[key] = new Date();
+        station.price[petrolType] = 69;
+        station.confirmedBy[petrolType] = uid;
+        station.confirmedAt[petrolType] = new Date();
         yield stationsActions.saveStationData(station)(dispatch);
         return Promise.resolve();
     }
@@ -71,9 +76,10 @@ const saveStation = (uid, station) => (dispatch) => __awaiter(this, void 0, void
 });
 const mapStateToProps = (state) => ({
     user: state.auth.user,
+    petrolType: (state.settings.settings && state.settings.settings.petrolType) ? state.settings.settings.petrolType : settingsDefaults.petrolType,
 });
 const mapDispatchToProps = (dispatch) => ({
-    saveStation: (uid, station) => saveStation(uid, station)(dispatch),
+    saveStation: (uid, petrolType, station) => saveStation(uid, petrolType, station)(dispatch),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ExpandedStationListItem);
 //# sourceMappingURL=ExpandedStationListItem.js.map

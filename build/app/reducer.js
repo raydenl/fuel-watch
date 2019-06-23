@@ -18,7 +18,10 @@ export const appReducer = (state = initialState, action) => {
             if (type === "SET_LOCATION_SUCCESS") {
                 return Object.assign({}, state, { location: action.location });
             }
-            if (type === "CLEAR_RESPONSE_SUCCESS") {
+            else if (type === "SET_CURRENT_LOCATION_SUCCESS") {
+                return Object.assign({}, state, { currentLocation: action.location });
+            }
+            else if (type === "CLEAR_RESPONSE_SUCCESS") {
                 return Object.assign({}, state, { response: undefined });
             }
             else {

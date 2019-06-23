@@ -6,8 +6,8 @@ export const stationsReducer = (state = initialState, action) => {
         case "STATIONS_LOADING_SUCCESS":
         case "STATIONS_DATA_LOADING_SUCCESS":
             return Object.assign({}, state, { stations: action.stations });
-        case "LOCATION_CHANGED_SUCCESS":
-            return Object.assign({}, state, { location: action.location });
+        case "STATION_DATA_SAVING_SUCCESS":
+            return Object.assign({}, state, { stations: state.stations.map(station => station.place_id === action.station.place_id ? action.station : station) });
         default:
             return state;
     }

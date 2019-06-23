@@ -35,7 +35,7 @@ export const saveSettings = (uid, settings) => (dispatch) => new Promise((resolv
     try {
         const userRef = database.ref('settings');
         yield userRef.child(uid).update(new SettingsEntity(settings));
-        dispatch(actionCreators.settingsSaved());
+        dispatch(actionCreators.settingsSaved(settings));
         resolve();
     }
     catch (err) {

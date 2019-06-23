@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import React from 'react';
-import { StyleSheet, Button, ScrollView, Switch, Text, Slider, TextInput } from 'react-native';
+import { StyleSheet, Button, ScrollView, Switch, Text, Slider, TextInput, Picker } from 'react-native';
 import { authActions } from '../auth';
 import { connect } from 'react-redux';
 import { settingsActions } from '../settings';
@@ -29,6 +29,7 @@ class SettingsScreen extends React.PureComponent {
                 useLocation: this.props.settings.useLocation,
                 radius: this.props.settings.radius || settingsDefaults.radius,
                 name: this.props.settings.name || this.props.user.displayName || settingsDefaults.name,
+                petrolType: this.props.settings.petrolType || settingsDefaults.petrolType,
             };
         };
         this._signOut = () => {
@@ -69,6 +70,9 @@ class SettingsScreen extends React.PureComponent {
             React.createElement(Switch, { value: this.state.useLocation, onValueChange: this._handleChange("useLocation", this._setLocation) }),
             React.createElement(Text, null, this.state.radius),
             React.createElement(Slider, { value: this.state.radius, onValueChange: this._handleChange("radius"), minimumValue: radiusSettings.min, maximumValue: radiusSettings.max, step: radiusSettings.step }),
+            React.createElement(Picker, { selectedValue: this.state.petrolType, style: { height: 50, width: 100 }, onValueChange: this._handleChange("petrolType") },
+                React.createElement(Picker.Item, { label: "91", value: "91" }),
+                React.createElement(Picker.Item, { label: "95", value: "95" })),
             React.createElement(Button, { title: "Sign out", onPress: this._signOut })));
     }
 }

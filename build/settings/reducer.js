@@ -4,6 +4,7 @@ const initialState = {
 export const settingsReducer = (state = initialState, action) => {
     switch (action.type) {
         case "SETTINGS_LOADING_SUCCESS":
+        case "SETTINGS_SAVING_SUCCESS":
             return Object.assign({}, state, { settings: action.settings });
         default:
             return state;

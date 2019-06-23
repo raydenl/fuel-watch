@@ -1,7 +1,9 @@
 import React from "react";
-import { Text, StyleSheet, Dimensions, View } from "react-native";
-const { width } = Dimensions.get('window');
-export default class StationListItem extends React.PureComponent {
+import { Text, StyleSheet, View } from "react-native";
+import { connect } from "react-redux";
+import { settingsDefaults } from "../settings";
+import Layout from "../constants/Layout";
+class StationListItem extends React.PureComponent {
     // _renderItem = ({ item }: { item: Station }) => (
     //     // <TouchableHighlight onPress={this._navigateToStation(item)}>
     //     // <StationListItem station={item} />
@@ -12,7 +14,10 @@ export default class StationListItem extends React.PureComponent {
     // );
     render() {
         return (React.createElement(View, { style: styles.card },
-            React.createElement(Text, null, this.props.station.name))
+            React.createElement(Text, null, this.props.petrolType),
+            React.createElement(Text, null, this.props.station.name),
+            this.props.station.price &&
+                React.createElement(Text, null, this.props.station.price[this.props.petrolType]))
         // <FlatList
         //     data={[this.props.station]}
         //     renderItem={this._renderItem}
@@ -39,7 +44,7 @@ const styles = StyleSheet.create({
     card: {
         //marginTop: 100,
         backgroundColor: 'blue',
-        width: width - 80,
+        width: Layout.window.width - 80,
         margin: 10,
         height: 100,
         borderRadius: 10,
@@ -47,4 +52,9 @@ const styles = StyleSheet.create({
         padding: 10,
     }
 });
+const mapStateToProps = (state) => ({
+    petrolType: (state.settings.settings && state.settings.settings.petrolType) ? state.settings.settings.petrolType : settingsDefaults.petrolType,
+});
+const mapDispatchToProps = null;
+export default connect(mapStateToProps, mapDispatchToProps)(StationListItem);
 //# sourceMappingURL=StationListItem.js.map

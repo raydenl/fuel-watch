@@ -1,13 +1,13 @@
 import React from "react";
-import { FlatList, Text, StyleSheet, Dimensions, View, Button } from "react-native";
+import { FlatList, Text, StyleSheet, View, Button } from "react-native";
 import { StationWithData, stationsActions, StationCard, petrolTypes } from "../stations";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import Sentry from '../libraries/sentry'
 import { StoreState } from "../libraries/redux/types";
 import { User } from "../auth/types";
-
-const { width } = Dimensions.get('window');
+import { settingsDefaults } from "../settings";
+import Layout from "../constants/Layout"
 
 interface OwnProps {
     station: StationWithData,
@@ -15,18 +15,19 @@ interface OwnProps {
 
 interface StateProps {
     user?: User,
+    petrolType: string,
 }
 
 interface DispatchProps {
-    saveStation: (uid: string, station: StationWithData) => Promise<void>,
+    saveStation: (uid: string, petrolType: string, station: StationWithData) => Promise<void>,
 }
 
 type Props = OwnProps & StateProps & DispatchProps;
 
 class ExpandedStationListItem extends React.PureComponent<Props, {}> {
 
-    _saveStationData = (station: StationWithData) => async () => {
-        await this.props.saveStation(this.props.user!.uid, station)
+    _saveStationData = (item: StationCard) => async () => {
+        await this.props.saveStation(this.props.user!.uid, item.petrolType, item.station)
     }
 
     _mapToItems = (): StationCard[] => {
@@ -41,10 +42,16 @@ class ExpandedStationListItem extends React.PureComponent<Props, {}> {
             <Text >{item.petrolType}</Text>
             <Text >{item.station.name}</Text>
             <Text >{item.station.vicinity}</Text>
-            <Text >{item.station.price[item.petrolType]}</Text>
-            <Button title="Save" onPress={this._saveStationData(item.station)}></Button>
+            {item.station.price &&
+                <Text >{item.station.price[item.petrolType]}</Text>
+            }
+            <Button title="Save" onPress={this._saveStationData(item)}></Button>
         </View>
     );
+
+    _getItemLayout = (_data: StationCard[] | null, index: number) => ({
+        length: Layout.window.width, offset: (Layout.window.width - 90) * index, index: index
+    })
 
     render() {
         return (
@@ -56,9 +63,11 @@ class ExpandedStationListItem extends React.PureComponent<Props, {}> {
                 showsHorizontalScrollIndicator={false}
                 style={styles.container}
                 decelerationRate={0}
-                snapToInterval={width - 60}
+                snapToInterval={Layout.window.width - 60}
                 snapToAlignment={"center"}
+                initialScrollIndex={petrolTypes.indexOf(this.props.petrolType)}
                 contentOffset={{ x: -30, y: 0 }}
+                getItemLayout={this._getItemLayout}
                 contentInset={{
                     top: 0,
                     left: 30,
@@ -79,7 +88,7 @@ const styles = StyleSheet.create({
     card: {
         //marginTop: 100,
         backgroundColor: 'blue',
-        width: width - 80,
+        width: Layout.window.width - 80,
         //margin: 10,
         height: 200,
         borderRadius: 10,
@@ -93,11 +102,11 @@ const styles = StyleSheet.create({
     }
 });
 
-const saveStation = (uid: string, station: StationWithData) => async (dispatch: Dispatch) => {
+const saveStation = (uid: string, petrolType: string, station: StationWithData) => async (dispatch: Dispatch) => {
     try {
-        const key = "91"
-        station.confirmedBy[key] = uid
-        station.confirmedAt[key] = new Date()
+        station.price[petrolType] = 69
+        station.confirmedBy[petrolType] = uid
+        station.confirmedAt[petrolType] = new Date()
 
         await stationsActions.saveStationData(station)(dispatch)
 
@@ -111,10 +120,11 @@ const saveStation = (uid: string, station: StationWithData) => async (dispatch: 
 
 const mapStateToProps = (state: StoreState): StateProps => ({
     user: state.auth.user,
+    petrolType: (state.settings.settings && state.settings.settings.petrolType) ? state.settings.settings.petrolType : settingsDefaults.petrolType!,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-    saveStation: (uid: string, station: StationWithData) => saveStation(uid, station)(dispatch),
+    saveStation: (uid: string, petrolType: string, station: StationWithData) => saveStation(uid, petrolType, station)(dispatch),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExpandedStationListItem)

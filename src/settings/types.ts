@@ -4,7 +4,7 @@ export type SettingsAction =
     | { type: "SETTINGS_LOADING_SUCCESS", settings: Settings }
     | { type: "SETTINGS_LOADING_REQUEST" }
     | { type: "SETTINGS_LOADING_FAILURE", response: Response }
-    | { type: "SETTINGS_SAVING_SUCCESS" }
+    | { type: "SETTINGS_SAVING_SUCCESS", settings: Settings }
     | { type: "SETTINGS_SAVING_REQUEST" }
     | { type: "SETTINGS_SAVING_FAILURE", response: Response }
 
@@ -17,6 +17,7 @@ export interface Settings {
     useLocation: boolean,
     radius?: number,
     name?: string,
+    petrolType?: string,
 }
 
 export interface RadiusSettings {

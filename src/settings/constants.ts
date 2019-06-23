@@ -5,6 +5,7 @@ export const settingsDefaults: Settings = {
     useLocation: true,
     radius: 1500,
     name: "",
+    petrolType: "91",
 }
 
 export const radiusSettings: RadiusSettings = {

@@ -103,7 +103,10 @@ const initialise = () => (dispatch) => __awaiter(this, void 0, void 0, function*
         if (!user)
             return;
         const settings = yield settingsActions.loadSettings(user.uid)(dispatch);
-        yield appActions.setLocation(settings)(dispatch);
+        appActions.setCurrentLocation()(dispatch);
+        if (settings && !settings.useLocation) {
+            appActions.setLocation(settings)(dispatch);
+        }
     }
     catch (err) {
         Sentry.captureException(err);

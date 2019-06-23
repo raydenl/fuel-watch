@@ -3,9 +3,7 @@ import { StationsAction, Station, StationWithData, StationData } from './types'
 import { Location } from '../app/types'
 import * as actionCreators from './actionCreators'
 import Sentry from '../libraries/sentry'
-import Expo from 'expo'
 import { config as googleConfig } from '../parties/google/config'
-import { debounce } from 'debounce'
 import { database } from "../libraries/firebase"
 import { StationData as StationDataEntity } from './StationData';
 
@@ -76,7 +74,7 @@ export const saveStationData = (station: StationWithData) =>
                 const userRef = database.ref('stations')
 
                 await userRef.child(station.place_id).update(new StationDataEntity(station as StationData))
-                dispatch(actionCreators.stationDataSaved())
+                dispatch(actionCreators.stationDataSaved(station))
                 resolve()
             }
             catch (err) {
@@ -85,12 +83,3 @@ export const saveStationData = (station: StationWithData) =>
                 reject()
             }
         })
-
-const debouncedLocationChange = (location: Expo.Location.LocationData) => (dispatch: Dispatch<StationsAction>) => {
-    return debounce(() => dispatch(actionCreators.locationChanged({ longitude: location.coords.longitude, latitude: location.coords.latitude })), 100)
-}
-
-export const startLocationListener = () =>
-    async (dispatch: Dispatch<StationsAction>) =>
-        Expo.Location.watchPositionAsync({ distanceInterval: 500, timeInterval: 5 * 60 * 1000, enableHighAccuracy: false },
-            location => debouncedLocationChange(location)(dispatch))

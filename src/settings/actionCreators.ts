@@ -8,7 +8,7 @@ export const loadingSettings: ActionCreator<SettingsAction> = () => ({ type: "SE
 
 export const loadingSettingsError: ActionCreator<SettingsAction> = (response: Response) => ({ type: "SETTINGS_LOADING_FAILURE", response })
 
-export const settingsSaved: ActionCreator<SettingsAction> = () => ({ type: "SETTINGS_SAVING_SUCCESS" })
+export const settingsSaved: ActionCreator<SettingsAction> = (settings: Settings) => ({ type: "SETTINGS_SAVING_SUCCESS", settings })
 
 export const savingSettings: ActionCreator<SettingsAction> = () => ({ type: "SETTINGS_SAVING_REQUEST" })
 

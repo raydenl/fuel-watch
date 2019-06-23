@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Button, ScrollView, Switch, Text, Slider, TextInput } from 'react-native'
+import { StyleSheet, Button, ScrollView, Switch, Text, Slider, TextInput, Picker } from 'react-native'
 import { authActions } from '../auth'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
@@ -72,6 +72,7 @@ class SettingsScreen extends React.PureComponent<Props, State> {
       useLocation: this.props.settings.useLocation,
       radius: this.props.settings.radius || settingsDefaults.radius,
       name: this.props.settings.name || this.props.user!.displayName || settingsDefaults.name,
+      petrolType: this.props.settings.petrolType || settingsDefaults.petrolType,
     }
   }
 
@@ -117,6 +118,13 @@ class SettingsScreen extends React.PureComponent<Props, State> {
         <Switch value={this.state.useLocation} onValueChange={this._handleChange("useLocation", this._setLocation)}></Switch>
         <Text>{this.state.radius}</Text>
         <Slider value={this.state.radius} onValueChange={this._handleChange("radius")} minimumValue={radiusSettings.min} maximumValue={radiusSettings.max} step={radiusSettings.step}></Slider>
+        <Picker
+          selectedValue={this.state.petrolType}
+          style={{ height: 50, width: 100 }}
+          onValueChange={this._handleChange("petrolType")}>
+          <Picker.Item label="91" value="91" />
+          <Picker.Item label="95" value="95" />
+        </Picker>
         <Button title="Sign out" onPress={this._signOut} />
       </ScrollView>)
   }

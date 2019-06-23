@@ -1,4 +1,4 @@
-import { Response, Location } from '../app/types'
+import { Response } from '../app/types'
 
 export type StationsAction =
     | { type: "STATIONS_LOADING_SUCCESS", stations: Station[] }
@@ -7,14 +7,12 @@ export type StationsAction =
     | { type: "STATIONS_DATA_LOADING_SUCCESS", stations: StationWithData[] }
     | { type: "STATIONS_DATA_LOADING_REQUEST" }
     | { type: "STATIONS_DATA_LOADING_FAILURE", response: Response }
-    | { type: "STATION_DATA_SAVING_SUCCESS" }
+    | { type: "STATION_DATA_SAVING_SUCCESS", station: StationWithData }
     | { type: "STATION_DATA_SAVING_REQUEST" }
     | { type: "STATION_DATA_SAVING_FAILURE", response: Response }
-    | { type: "LOCATION_CHANGED_SUCCESS", location: Location }
 
 export interface StationsState {
     readonly stations: StationWithData[],
-    readonly location?: Location,
 }
 
 export interface Station {

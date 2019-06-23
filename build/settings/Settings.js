@@ -4,6 +4,7 @@ export class Settings {
         this.radius = settings.radius;
         this.name = settings.name;
         this.useLocation = settings.useLocation;
+        this.petrolType = settings.petrolType;
     }
 }
 //# sourceMappingURL=Settings.js.map

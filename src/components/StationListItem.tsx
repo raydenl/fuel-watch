@@ -1,10 +1,22 @@
 import React from "react";
-import { Text, StyleSheet, Dimensions, View } from "react-native";
+import { Text, StyleSheet, View } from "react-native";
 import { StationWithData } from "../stations";
+import { connect } from "react-redux";
+import { StoreState } from "../libraries/redux/types";
+import { settingsDefaults } from "../settings";
+import Layout from "../constants/Layout"
 
-const { width } = Dimensions.get('window');
+interface OwnProps {
+    station: StationWithData,
+}
 
-export default class StationListItem extends React.PureComponent<{ station: StationWithData }, {}> {
+interface StateProps {
+    petrolType: string,
+}
+
+type Props = OwnProps & StateProps;
+
+class StationListItem extends React.PureComponent<Props, {}> {
 
     // _renderItem = ({ item }: { item: Station }) => (
     //     // <TouchableHighlight onPress={this._navigateToStation(item)}>
@@ -18,7 +30,12 @@ export default class StationListItem extends React.PureComponent<{ station: Stat
     render() {
         return (
             <View style={styles.card}>
-                <Text >{this.props.station.name}</Text>
+                <Text>{this.props.petrolType}</Text>
+                <Text>{this.props.station.name}</Text>
+                {this.props.station.price &&
+                    <Text>{this.props.station.price[this.props.petrolType]}</Text>
+                }
+
             </View>
             // <FlatList
             //     data={[this.props.station]}
@@ -47,7 +64,7 @@ const styles = StyleSheet.create({
     card: {
         //marginTop: 100,
         backgroundColor: 'blue',
-        width: width - 80,
+        width: Layout.window.width - 80,
         margin: 10,
         height: 100,
         borderRadius: 10,
@@ -56,3 +73,11 @@ const styles = StyleSheet.create({
         //paddingHorizontal : 30
     }
 });
+
+const mapStateToProps = (state: StoreState): StateProps => ({
+    petrolType: (state.settings.settings && state.settings.settings.petrolType) ? state.settings.settings.petrolType : settingsDefaults.petrolType!,
+})
+
+const mapDispatchToProps = null
+
+export default connect(mapStateToProps, mapDispatchToProps)(StationListItem)

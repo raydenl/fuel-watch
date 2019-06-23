@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createSwitchNavigator } from 'react-navigation';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import AuthNavigator from './AuthNavigator';
 import MainNavigator from './MainNavigator';
 import { mainRoute, authRoute } from './constants';
@@ -9,13 +9,14 @@ class AppNavigator extends React.Component {
         super(props);
     }
     render() {
-        const Navigator = createSwitchNavigator({
+        const navigator = createSwitchNavigator({
             [mainRoute]: MainNavigator,
             [authRoute]: AuthNavigator,
         }, {
             initialRouteName: this.props.isLoggedIn ? mainRoute : authRoute
         });
-        return React.createElement(Navigator, null);
+        const NavigatorContainer = createAppContainer(navigator);
+        return React.createElement(NavigatorContainer, null);
     }
 }
 const mapStateToProps = (state) => ({

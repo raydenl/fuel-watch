@@ -10,7 +10,6 @@ export const appReducer: Reducer<AppState> = (state: AppState = initialState, ac
 
     console.log(type)
 
-
     const matches = /(.*)_(REQUEST|SUCCESS|FAILURE)/.exec(type);
 
     // not a *_REQUEST / *_SUCCESS /  *_FAILURE actions, so we ignore them
@@ -37,7 +36,14 @@ export const appReducer: Reducer<AppState> = (state: AppState = initialState, ac
                     ...state,
                     location: action.location,
                 }
-            } if (type === "CLEAR_RESPONSE_SUCCESS") {
+
+            } else if (type === "SET_CURRENT_LOCATION_SUCCESS") {
+                return {
+                    ...state,
+                    currentLocation: action.location,
+                }
+
+            } else if (type === "CLEAR_RESPONSE_SUCCESS") {
                 return {
                     ...state,
                     response: undefined,

@@ -7,7 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import React from 'react';
-import { Text, View, FlatList, TouchableHighlight } from 'react-native';
+import { FlatList, TouchableHighlight } from 'react-native';
+import { appActions } from '../app/index';
 import { stationsActions } from '../stations';
 import { connect } from 'react-redux';
 import { withNavigation } from 'react-navigation';
@@ -22,24 +23,24 @@ class StationsScreen extends React.PureComponent {
     constructor(props) {
         super(props);
         this._loadStations = () => __awaiter(this, void 0, void 0, function* () {
-            let location = this.props.initialLocation;
-            if (this.props.useLocation && this.props.realtimeLocation) {
-                location = this.props.realtimeLocation;
+            this.setState({ loading: true });
+            let location = this.props.fixedLocation;
+            if (this.props.useLocation && this.props.currentLocation) {
+                location = this.props.currentLocation;
             }
             if (location) {
                 yield this.props.loadStations(location, this.props.radius);
-                this.setState({ showStations: true });
-            }
-            else {
-                this.setState({ showStations: false });
+                this.setState({ loading: false });
             }
         });
         this._tabReceivedFocus = () => __awaiter(this, void 0, void 0, function* () {
+            console.log("Stations tab received focus");
             if (this.props.useLocation) {
                 this.subscription = yield this.props.startLocationListener();
             }
         });
         this._tabLostFocus = () => {
+            console.log("Stations tab lost focus");
             if (this.subscription) {
                 this.subscription.remove();
             }
@@ -52,7 +53,7 @@ class StationsScreen extends React.PureComponent {
             (React.createElement(TouchableHighlight, { onPress: this._expandStation(item) },
                 React.createElement(StationListItem, { station: item }))));
         this.state = {
-            showStations: false,
+            loading: true,
         };
     }
     componentDidMount() {
@@ -61,18 +62,16 @@ class StationsScreen extends React.PureComponent {
         this.props.navigation.addListener('willBlur', this._tabLostFocus);
     }
     componentDidUpdate(prevProps) {
-        if (this.props.realtimeLocation !== prevProps.realtimeLocation ||
-            this.props.initialLocation !== prevProps.initialLocation ||
+        if (this.props.fixedLocation !== prevProps.fixedLocation ||
+            this.props.currentLocation !== prevProps.currentLocation ||
             this.props.radius !== prevProps.radius ||
             this.props.useLocation !== prevProps.useLocation) {
             this._loadStations();
         }
     }
     render() {
-        return (this.state.showStations ?
-            (React.createElement(FlatList, { data: this.props.stations, extraData: this.state, renderItem: this._renderStation, keyExtractor: item => item.place_id })) :
-            (React.createElement(View, null,
-                React.createElement(Text, null, "Loading stations"))));
+        return (!this.state.loading &&
+            (React.createElement(FlatList, { data: this.props.stations, extraData: this.state, renderItem: this._renderStation, keyExtractor: item => item.place_id })));
     }
 }
 StationsScreen.navigationOptions = {
@@ -98,13 +97,13 @@ const loadStations = (location, radius) => (dispatch) => __awaiter(this, void 0,
 });
 const mapStateToProps = (state) => ({
     stations: state.stations.stations,
-    realtimeLocation: state.stations.location,
-    initialLocation: state.app.location,
+    fixedLocation: state.app.location,
+    currentLocation: state.app.currentLocation,
     useLocation: (state.settings.settings && state.settings.settings.useLocation) ? true : false,
     radius: (state.settings.settings && state.settings.settings.radius) ? state.settings.settings.radius : settingsDefaults.radius,
 });
 const mapDispatchToProps = (dispatch) => ({
-    startLocationListener: () => stationsActions.startLocationListener()(dispatch),
+    startLocationListener: () => appActions.startLocationListener()(dispatch),
     loadStations: (location, radius) => loadStations(location, radius)(dispatch),
 });
 const redux = connect(mapStateToProps, mapDispatchToProps)(StationsScreen);

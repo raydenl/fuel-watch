@@ -13,10 +13,12 @@ export const stationsReducer: Reducer<StationsState> = (state: StationsState = i
                 ...state,
                 stations: action.stations as StationWithData[]
             }
-        case "LOCATION_CHANGED_SUCCESS":
+        case "STATION_DATA_SAVING_SUCCESS":
             return {
                 ...state,
-                location: action.location
+                stations: state.stations.map(station =>
+                    station.place_id === action.station.place_id ? action.station : station
+                )
             }
         default:
             return state;

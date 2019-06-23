@@ -4,16 +4,16 @@
     "description": "A very interesting project.",
     "slug": "fuel-watch",
     "privacy": "public",
-    "sdkVersion": "30.0.0",
+    "sdkVersion": "33.0.0",
     "platforms": [
       "ios",
       "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./build/assets/images/icon.png",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./build/assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

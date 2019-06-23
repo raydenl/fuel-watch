@@ -8,6 +8,7 @@ const initialState: SettingsState = {
 export const settingsReducer: Reducer<SettingsState> = (state: SettingsState = initialState, action: SettingsAction) => {
     switch (action.type) {
         case "SETTINGS_LOADING_SUCCESS":
+        case "SETTINGS_SAVING_SUCCESS":
             return {
                 ...state,
                 settings: action.settings

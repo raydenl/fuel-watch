@@ -148,7 +148,11 @@ const initialise = () => async (dispatch: Dispatch) => {
 
     const settings = await settingsActions.loadSettings(user.uid)(dispatch)
 
-    await appActions.setLocation(settings)(dispatch)
+    appActions.setCurrentLocation()(dispatch)
+
+    if (settings && !settings.useLocation) {
+      appActions.setLocation(settings)(dispatch)
+    }
   } catch (err) {
     Sentry.captureException(err);
   }

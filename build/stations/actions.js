@@ -8,9 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import * as actionCreators from './actionCreators';
 import Sentry from '../libraries/sentry';
-import Expo from 'expo';
 import { config as googleConfig } from '../parties/google/config';
-import { debounce } from 'debounce';
 import { database } from "../libraries/firebase";
 import { StationData as StationDataEntity } from './StationData';
 export const loadStations = (location, radius) => (dispatch) => __awaiter(this, void 0, void 0, function* () {
@@ -77,7 +75,7 @@ export const saveStationData = (station) => (dispatch) => __awaiter(this, void 0
         try {
             const userRef = database.ref('stations');
             yield userRef.child(station.place_id).update(new StationDataEntity(station));
-            dispatch(actionCreators.stationDataSaved());
+            dispatch(actionCreators.stationDataSaved(station));
             resolve();
         }
         catch (err) {
@@ -86,11 +84,5 @@ export const saveStationData = (station) => (dispatch) => __awaiter(this, void 0
             reject();
         }
     }));
-});
-const debouncedLocationChange = (location) => (dispatch) => {
-    return debounce(() => dispatch(actionCreators.locationChanged({ longitude: location.coords.longitude, latitude: location.coords.latitude })), 100);
-};
-export const startLocationListener = () => (dispatch) => __awaiter(this, void 0, void 0, function* () {
-    return Expo.Location.watchPositionAsync({ distanceInterval: 500, timeInterval: 5 * 60 * 1000, enableHighAccuracy: false }, location => debouncedLocationChange(location)(dispatch));
 });
 //# sourceMappingURL=actions.js.map

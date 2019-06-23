@@ -1,1 +1,0 @@
-{"version":3,"file":"StationData.js","sourceRoot":"","sources":["../../src/stations/StationData.ts"],"names":[],"mappings":"AAEA,MAAM,OAAO,WAAW;IAKpB,YAAY,WAAyB;QACjC,IAAI,CAAC,KAAK,GAAG,WAAW,CAAC,KAAK,CAAA;QAC9B,IAAI,CAAC,WAAW,GAAG,WAAW,CAAC,WAAW,CAAA;QAC1C,IAAI,CAAC,WAAW,GAAG,WAAW,CAAC,WAAW,CAAA;IAC9C,CAAC;CACJ"}

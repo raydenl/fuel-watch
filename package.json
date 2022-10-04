@@ -27,7 +27,7 @@
   "dependencies": {
     "@expo/vector-icons": "^10.0.2",
     "debounce": "^1.2.0",
-    "expo": "^33.0.7",
+    "expo": "^46.0.14",
     "firebase": "^6.2.2",
     "react": "16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
